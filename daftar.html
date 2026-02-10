@@ -131,25 +131,50 @@
 </script>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const webAppUrl = "URL_WEB_APP_ANDA_DISINI";
+    // 1. Inisialisasi Supabase
+    const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-document.getElementById('registrationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-    data.action = 'register'; // Tambahkan aksi
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Memproses...";
+        btn.disabled = true;
 
-    fetch(webAppUrl, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(response => {
-        alert(response.message);
-        if(response.result === 'success') window.location.reload();
+        const formData = new FormData(e.target);
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const metaData = {
+            nim: formData.get('nim'),
+            nama: formData.get('nama'),
+            prodi: formData.get('prodi'),
+            tahun_lulus: formData.get('tahun_lulus')
+        };
+
+        // 2. Proses Pendaftaran ke Supabase Auth
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: metaData // Menyimpan data tambahan alumni
+            }
+        });
+
+        if (error) {
+            alert("Gagal Daftar: " + error.message);
+        } else {
+            alert("Pendaftaran Berhasil! Silakan cek email untuk verifikasi atau langsung login.");
+            window.location.href = "index.html";
+        }
+
+        btn.innerText = "Buat Akun";
+        btn.disabled = false;
     });
-});
 </script>
 
 </body>
