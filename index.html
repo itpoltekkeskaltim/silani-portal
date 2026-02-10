@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --bg-light: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header img {
+            width: 80px; /* Opsional: Tambahkan logo Poltekkes di sini */
+            margin-bottom: 10px;
+        }
+        .header h2 { 
+            color: var(--primary-color); 
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p { 
+            color: #7f8c8d; 
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .form-group { margin-bottom: 20px; position: relative; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: #333; 
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        input:focus { 
+            border-color: var(--secondary-color); 
+            box-shadow: 0 0 5px rgba(39, 174, 96, 0.2);
+            outline: none; 
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .btn-login:hover { 
+            background-color: #1a252f; 
+        }
+        
+        .forgot-pass {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .forgot-pass a {
+            color: #e67e22;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .register-prompt { 
+            text-align: center; 
+            margin-top: 25px; 
+            font-size: 14px; 
+            color: #666;
+        }
+        .register-prompt a { 
+            color: var(--secondary-color); 
+            text-decoration: none; 
+            font-weight: bold;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="header">
+        <h2>Login Alumni</h2>
+        <p>Akses Layanan SiLaNi terStudy</p>
+    </div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label>NIM / Email</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan NIM atau Email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan Password" required>
+        </div>
+
+        <div class="forgot-pass">
+            <a href="lupapassword.html">Lupa Password?</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+            <span id="btnText">Masuk Ke Sistem</span>
+            <div class="loader" id="loader"></div>
+        </button>
+    </form>
+
+    <div class="register-prompt">
+        Alumni baru? <a href="daftar.html">Buat Akun Sekarang</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btnText = document.getElementById('btnText');
+        const loader = document.getElementById('loader');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Simulasi Loading
+        btnText.style.display = 'none';
+        loader.style.display = 'block';
+        loginBtn.disabled = true;
+
+        const username = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        // Simulasi Logika Login
+        setTimeout(() => {
+            console.log("Mencoba login dengan:", username);
+            
+            // Di sini Anda akan memanggil fungsi google.script.run untuk validasi backend
+            alert("Sistem sedang memverifikasi data Anda...");
+            
+            // Reset button
+            btnText.style.display = 'block';
+            loader.style.display = 'none';
+            loginBtn.disabled = false;
+        }, 1500);
+    });
+</script>
+
+</body>
+</html>
