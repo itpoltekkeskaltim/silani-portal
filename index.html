@@ -153,56 +153,27 @@
     Alumni baru? <a href="daftar.html" id="linkDaftar">Buat Akun Sekarang</a>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // Memastikan link terbuka tetap di dalam iframe Google Sites
-    document.getElementById('linkDaftar').addEventListener('click', function(e) {
-        // Jika ingin pindah halaman di dalam kotak iframe saja:
-        window.location.href = 'daftar.html';
+    const supabase = supabase.createClient('https://biduabmeloughbnqlwcq.supabase.co', 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb');
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-    });
-</script>
-</div>
-
-<script>
-    .then(response => {
-    // Di dalam fetch success index.html
-if(response.result === 'success') {
-    // Simpan data ke session lokal
-    localStorage.setItem('alumniNama', response.user.nama);
-    localStorage.setItem('alumniNIM', response.user.nim);
-    
-    alert("Login Berhasil!");
-    // Arahkan ke dashboard.html yang baru kita buat
-    window.location.href = "dashboard.html"; 
-}
-});
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const btnText = document.getElementById('btnText');
-        const loader = document.getElementById('loader');
-        const loginBtn = document.getElementById('loginBtn');
-
-        // Simulasi Loading
-        btnText.style.display = 'none';
-        loader.style.display = 'block';
-        loginBtn.disabled = true;
-
-        const username = document.getElementById('username').value;
+        const email = document.getElementById('username').value; // Mengasumsikan login pakai email
         const pass = document.getElementById('password').value;
 
-        // Simulasi Logika Login
-        setTimeout(() => {
-            console.log("Mencoba login dengan:", username);
-            
-            // Di sini Anda akan memanggil fungsi google.script.run untuk validasi backend
-            alert("Sistem sedang memverifikasi data Anda...");
-            
-            // Reset button
-            btnText.style.display = 'block';
-            loader.style.display = 'none';
-            loginBtn.disabled = false;
-        }, 1500);
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: pass,
+        });
+
+        if (error) {
+            alert("Login Gagal: " + error.message);
+        } else {
+            // Simpan data user ke localStorage untuk Dashboard
+            localStorage.setItem('alumniNama', data.user.user_metadata.nama);
+            window.location.href = "dashboard.html";
+        }
     });
 </script>
 
