@@ -165,13 +165,16 @@
 
 <script>
     .then(response => {
-    if(response.result === 'success') {
-        alert("Selamat datang, " + response.user.nama);
-        // "top" akan memaksa Google Sites berpindah halaman sepenuhnya
-        window.top.location.href = "https://sites.google.com/view/alumni-poltekkes-kaltim/dashboard";
-    } else {
-        alert(response.message);
-    }
+    // Di dalam fetch success index.html
+if(response.result === 'success') {
+    // Simpan data ke session lokal
+    localStorage.setItem('alumniNama', response.user.nama);
+    localStorage.setItem('alumniNIM', response.user.nim);
+    
+    alert("Login Berhasil!");
+    // Arahkan ke dashboard.html yang baru kita buat
+    window.location.href = "dashboard.html"; 
+}
 });
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
