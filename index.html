@@ -149,9 +149,18 @@
         </button>
     </form>
 
-    <div class="register-prompt">
-        Alumni baru? <a href="daftar.html">Buat Akun Sekarang</a>
-    </div>
+   <div class="register-prompt">
+    Alumni baru? <a href="daftar.html" id="linkDaftar">Buat Akun Sekarang</a>
+</div>
+
+<script>
+    // Memastikan link terbuka tetap di dalam iframe Google Sites
+    document.getElementById('linkDaftar').addEventListener('click', function(e) {
+        // Jika ingin pindah halaman di dalam kotak iframe saja:
+        window.location.href = 'daftar.html';
+        e.preventDefault();
+    });
+</script>
 </div>
 
 <script>
