@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar SiLaNi</title>
+    <title>Daftar Akun SiLaNi</title>
     <style>
         :root { --primary-color: #2c3e50; --secondary-color: #27ae60; --bg-light: #f4f7f6; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-light); display: flex; justify-content: center; align-items: center; padding: 20px; min-height: 100vh; margin: 0; }
@@ -15,7 +15,6 @@
         .btn-submit { width: 100%; padding: 12px; background-color: var(--secondary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
         .btn-submit:disabled { background-color: #95a5a6; cursor: not-allowed; }
         .footer-link { text-align: center; margin-top: 15px; font-size: 13px; }
-        .footer-link a { color: var(--secondary-color); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -29,11 +28,11 @@
     <form id="registrationForm">
         <div class="form-group">
             <label>NIM (Nomor Induk Mahasiswa)</label>
-            <input type="text" name="nim" placeholder="Contoh: P0722..." required>
+            <input type="text" name="nim" required>
         </div>
         <div class="form-group">
             <label>Nama Lengkap</label>
-            <input type="text" name="nama" placeholder="Sesuai Ijazah" required>
+            <input type="text" name="nama" required>
         </div>
         <div class="form-group">
             <label>Program Studi</label>
@@ -47,15 +46,15 @@
         </div>
         <div class="form-group">
             <label>Tahun Lulus</label>
-            <input type="number" name="tahun_lulus" min="2000" max="2026" placeholder="Contoh: 2023" required>
+            <input type="number" name="tahun_lulus" min="2000" max="2026" required>
         </div>
         <div class="form-group">
             <label>Email Aktif</label>
-            <input type="email" name="email" placeholder="nama@email.com" required>
+            <input type="email" name="email" required>
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" placeholder="Minimal 6 Karakter" minlength="6" required>
+            <input type="password" name="password" minlength="6" placeholder="Minimal 6 karakter" required>
         </div>
 
         <button type="submit" id="btnSubmit" class="btn-submit">Buat Akun</button>
@@ -67,50 +66,46 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-    // 2. Inisialisasi Supabase
     const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb'; 
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const form = document.getElementById('registrationForm');
-    const btn = document.getElementById('btnSubmit');
+    const regForm = document.getElementById('registrationForm');
+    const btnSubmit = document.getElementById('btnSubmit');
 
-    form.addEventListener('submit', async (e) => {
+    regForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Ambil data dari form
-        const formData = new FormData(form);
+        const formData = new FormData(regForm);
         const email = formData.get('email');
         const password = formData.get('password');
 
-        // Validasi Password di sisi Client (Penting!)
+        // Proteksi sisi client agar tidak kena error 400
         if (password.length < 6) {
-            alert("Password minimal harus 6 karakter!");
+            alert("Password minimal 6 karakter!");
             return;
         }
 
-        btn.innerText = "Sedang Memproses...";
-        btn.disabled = true;
+        btnSubmit.innerText = "Sedang Mendaftar...";
+        btnSubmit.disabled = true;
 
         try {
-            // A. PROSES DAFTAR KE AUTH (Membuat User Login)
+            // 1. DAFTAR KE AUTH
             const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                 email: email,
                 password: password,
             });
 
-            // Jika ada error di tahap Auth (seperti email sudah terdaftar atau format salah)
             if (authError) throw authError;
 
-            // B. PROSES SIMPAN KE TABEL ALUMNI (Jika Auth Berhasil)
+            // 2. SIMPAN KE TABEL ALUMNI
             if (authData.user) {
                 const { error: dbError } = await supabaseClient
                     .from('alumni')
                     .insert([{ 
-                        id: authData.user.id, // Menghubungkan ID Auth ke Tabel Alumni
+                        id: authData.user.id, // Menghubungkan ID Auth ke Tabel
                         nim: formData.get('nim'),
                         nama: formData.get('nama'),
                         prodi: formData.get('prodi'),
@@ -119,23 +114,21 @@
                     }]);
 
                 if (dbError) {
-                    console.error("Database Error:", dbError);
-                    alert("Akun terbuat, tapi gagal menyimpan data profil: " + dbError.message);
+                    console.error("Detail Error DB:", dbError);
+                    alert("Akun terbuat, tapi profil gagal masuk ke tabel alumni. Cek RLS!");
                 } else {
-                    alert("Pendaftaran Berhasil! Silakan cek email (jika konfirmasi aktif) atau langsung Login.");
+                    alert("Pendaftaran Berhasil!");
                     window.location.href = "index.html"; 
                 }
             }
-
         } catch (err) {
-            console.error("Error Detail:", err);
-            alert("Gagal Daftar: " + err.message);
+            console.error("Error Full:", err);
+            alert("Gagal: " + err.message);
         } finally {
-            btn.innerText = "Buat Akun";
-            btn.disabled = false;
+            btnSubmit.innerText = "Buat Akun";
+            btnSubmit.disabled = false;
         }
     });
 </script>
-
 </body>
 </html>
