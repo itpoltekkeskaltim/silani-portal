@@ -4,61 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #27ae60;
-            --bg-light: #f4f7f6;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .register-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+        :root { --primary-color: #2c3e50; --secondary-color: #27ae60; --bg-light: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-light); margin: 0; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .register-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .header { text-align: center; margin-bottom: 25px; }
         .header h2 { color: var(--primary-color); margin-bottom: 5px; }
         .header p { color: #666; font-size: 14px; }
-        
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #333; }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        input:focus { border-color: var(--secondary-color); outline: none; }
-        
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .btn-submit { width: 100%; padding: 12px; background-color: var(--secondary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
         .btn-submit:hover { background-color: #219150; }
-        
+        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
         .footer-link { text-align: center; margin-top: 15px; font-size: 13px; }
         .footer-link a { color: var(--secondary-color); text-decoration: none; }
     </style>
@@ -76,126 +33,101 @@
             <label>NIM (Nomor Induk Mahasiswa)</label>
             <input type="text" name="nim" placeholder="Contoh: P0722..." required>
         </div>
-
         <div class="form-group">
             <label>Nama Lengkap</label>
             <input type="text" name="nama" placeholder="Sesuai Ijazah" required>
         </div>
-
         <div class="form-group">
             <label>Program Studi</label>
             <select name="prodi" required>
                 <option value="">-- Pilih Prodi --</option>
                 <option value="D3 Keperawatan">D3 Keperawatan</option>
-                <option value="D3 Kebidanan">D3 PJJ Keperawatan</option>
-                <option value="D4 Gizi">STr Keperawatan</option>
-                <option value="D4 Gizi">Pendidikan Profesi Ners</option>
-                <option value="D4 Gizi">D3 Kebidanan</option>
-                <option value="D4 Gizi">D3 PJJ Kebidanan</option>
-                <option value="D4 Gizi">D3 Kebidanan (Kampus Balikpapan)</option>
-                <option value="D4 Gizi">STr Kebidanan</option>
-                <option value="D4 Gizi">Pendidikan Profesi Bidan</option>
-                <option value="D4 Gizi">D3 Teknologi Laboratorium Medis / Analis Kesehatan</option>
-                <option value="D4 Gizi">STr Gizi</option>
-                <option value="D4 Gizi">STr Promosi Kesehatan</option>
-                </select>
+                <option value="STr Keperawatan">STr Keperawatan</option>
+                <option value="D3 Kebidanan">D3 Kebidanan</option>
+                <option value="STr Gizi">STr Gizi</option>
+            </select>
         </div>
-
         <div class="form-group">
             <label>Tahun Lulus</label>
             <input type="number" name="tahun_lulus" min="2000" max="2026" placeholder="Contoh: 2023" required>
         </div>
-
         <div class="form-group">
             <label>Email Aktif</label>
             <input type="email" name="email" placeholder="nama@email.com" required>
         </div>
-
-        <div class="form-group">
+        <div class="form-group)
             <label>Password</label>
-            <input type="password" name="password" placeholder="Minimal 8 Karakter" required>
+            <input type="password" name="password" placeholder="Minimal 6 Karakter" required>
         </div>
-
-        <button type="submit" class="btn-submit">Buat Akun</button>
+        <button type="submit" id="btnSubmit" class="btn-submit">Buat Akun</button>
     </form>
 
-   <div class="footer-link">
-    Sudah punya akun? <a href="index.html" id="linkLogin">Login di sini</a>
-</div>
-
-<script>
-    document.getElementById('linkLogin').addEventListener('click', function(e) {
-        window.location.href = 'index.html';
-        e.preventDefault();
-    });
-</script>
+    <div class="footer-link">
+        Sudah punya akun? <a href="index.html">Login di sini</a>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // 1. Inisialisasi Supabase (Perhatikan cara pemanggilan 'createClient')
-const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb';
-const { createClient } = supabase; // Tambahkan baris ini
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-document.getElementById('registrationForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+    // --- KUNCI PENTING 1: Inisialisasi ---
+    const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
+    const SUPABASE_KEY = 'MASUKKAN_ANON_KEY_KAMU_DISINI'; // Ambil dari Settings > API > anon public
     
-    const btn = e.target.querySelector('button');
-    btn.innerText = "Memproses...";
-    btn.disabled = true;
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const userData = {
-        nim: formData.get('nim'),
-        nama: formData.get('nama'),
-        prodi: formData.get('prodi'),
-        tahun_lulus: parseInt(formData.get('tahun_lulus'))
-    };
+    const regForm = document.getElementById('registrationForm');
+    const btnSubmit = document.getElementById('btnSubmit');
 
-    // 2. Proses Pendaftaran ke Supabase Auth
-    const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-    });
+    regForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Disable tombol biar tidak diklik 2 kali
+        btnSubmit.innerText = "Memproses...";
+        btnSubmit.disabled = true;
 
-    if (authError) {
-        alert("Gagal Daftar Akun: " + authError.message);
-        btn.innerText = "Buat Akun";
-        btn.disabled = false;
-        return;
-    }
+        const formData = new FormData(regForm);
+        const email = formData.get('email');
+        const password = formData.get('password');
 
-    // 3. Simpan data tambahan ke tabel 'alumni' jika pendaftaran Auth berhasil
-    if (authData.user) {
-        const { error: dbError } = await supabaseClient
-            .from('alumni')
-            .insert([
-                { 
-                    id: authData.user.id, // Ambil ID dari Auth
-                    ...userData,
-                    email: email 
-                }
-            ]);
+        try {
+            // --- KUNCI PENTING 2: Daftarkan User ke Auth ---
+            const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+            });
 
-        if (dbError) {
-            console.error("Database Error:", dbError);
-            alert("Akun dibuat, tapi gagal menyimpan profil: " + dbError.message);
-        } else {
-            alert("Pendaftaran Berhasil! Silakan cek email untuk verifikasi.");
-            window.location.href = "index.html";
+            if (authError) throw authError;
+
+            // --- KUNCI PENTING 3: Simpan Detail ke Tabel Alumni ---
+            if (authData.user) {
+                const { error: dbError } = await supabaseClient
+                    .from('alumni')
+                    .insert([
+                        { 
+                            id: authData.user.id, // Ini menyambungkan Auth ke Tabel Alumni
+                            nim: formData.get('nim'),
+                            nama: formData.get('nama'),
+                            prodi: formData.get('prodi'),
+                            tahun_lulus: parseInt(formData.get('tahun_lulus')),
+                            email: email 
+                        }
+                    ]);
+
+                if (dbError) throw dbError;
+
+                alert("Pendaftaran Berhasil! Akun sudah aktif.");
+                window.location.href = 'index.html'; // Pindah ke halaman login
+            }
+
+        } catch (error) {
+            alert("Terjadi masalah: " + error.message);
+        } finally {
+            btnSubmit.innerText = "Buat Akun";
+            btnSubmit.disabled = false;
         }
-    }
-
-    btn.innerText = "Buat Akun";
-    btn.disabled = false;
-});
     });
 </script>
-
 </body>
 </html>
