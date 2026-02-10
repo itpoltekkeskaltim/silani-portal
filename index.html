@@ -164,6 +164,15 @@
 </div>
 
 <script>
+    .then(response => {
+    if(response.result === 'success') {
+        alert("Selamat datang, " + response.user.nama);
+        // "top" akan memaksa Google Sites berpindah halaman sepenuhnya
+        window.top.location.href = "https://sites.google.com/view/alumni-poltekkes-kaltim/dashboard";
+    } else {
+        alert(response.message);
+    }
+});
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
