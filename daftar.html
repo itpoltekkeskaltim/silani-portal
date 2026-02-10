@@ -119,9 +119,16 @@
         <button type="submit" class="btn-submit">Buat Akun</button>
     </form>
 
-    <div class="footer-link">
-        Sudah punya akun? <a href="index.html">Login di sini</a>
-    </div>
+   <div class="footer-link">
+    Sudah punya akun? <a href="index.html" id="linkLogin">Login di sini</a>
+</div>
+
+<script>
+    document.getElementById('linkLogin').addEventListener('click', function(e) {
+        window.location.href = 'index.html';
+        e.preventDefault();
+    });
+</script>
 </div>
 
 <script>
