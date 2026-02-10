@@ -134,46 +134,66 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // 1. Inisialisasi Supabase
-    const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // 1. Inisialisasi Supabase (Perhatikan cara pemanggilan 'createClient')
+const SUPABASE_URL = 'https://biduabmeloughbnqlwcq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb';
+const { createClient } = supabase; // Tambahkan baris ini
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const btn = e.target.querySelector('button');
-        btn.innerText = "Memproses...";
-        btn.disabled = true;
+document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const btn = e.target.querySelector('button');
+    btn.innerText = "Memproses...";
+    btn.disabled = true;
 
-        const formData = new FormData(e.target);
-        const email = formData.get('email');
-        const password = formData.get('password');
-        const metaData = {
-            nim: formData.get('nim'),
-            nama: formData.get('nama'),
-            prodi: formData.get('prodi'),
-            tahun_lulus: formData.get('tahun_lulus')
-        };
+    const formData = new FormData(e.target);
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const userData = {
+        nim: formData.get('nim'),
+        nama: formData.get('nama'),
+        prodi: formData.get('prodi'),
+        tahun_lulus: parseInt(formData.get('tahun_lulus'))
+    };
 
-        // 2. Proses Pendaftaran ke Supabase Auth
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: metaData // Menyimpan data tambahan alumni
-            }
-        });
+    // 2. Proses Pendaftaran ke Supabase Auth
+    const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+    });
 
-        if (error) {
-            alert("Gagal Daftar: " + error.message);
-        } else {
-            alert("Pendaftaran Berhasil! Silakan cek email untuk verifikasi atau langsung login.");
-            window.location.href = "index.html";
-        }
-
+    if (authError) {
+        alert("Gagal Daftar Akun: " + authError.message);
         btn.innerText = "Buat Akun";
         btn.disabled = false;
+        return;
+    }
+
+    // 3. Simpan data tambahan ke tabel 'alumni' jika pendaftaran Auth berhasil
+    if (authData.user) {
+        const { error: dbError } = await supabaseClient
+            .from('alumni')
+            .insert([
+                { 
+                    id: authData.user.id, // Ambil ID dari Auth
+                    ...userData,
+                    email: email 
+                }
+            ]);
+
+        if (dbError) {
+            console.error("Database Error:", dbError);
+            alert("Akun dibuat, tapi gagal menyimpan profil: " + dbError.message);
+        } else {
+            alert("Pendaftaran Berhasil! Silakan cek email untuk verifikasi.");
+            window.location.href = "index.html";
+        }
+    }
+
+    btn.innerText = "Buat Akun";
+    btn.disabled = false;
+});
     });
 </script>
 
