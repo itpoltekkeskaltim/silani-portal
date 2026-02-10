@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --bg: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--primary);
+        }
+        .dashboard-header {
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .user-info h3 { margin: 0; color: var(--secondary); }
+        .user-info p { margin: 0; font-size: 14px; color: #666; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #eee;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--secondary);
+        }
+        .card .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .card h4 { margin: 10px 0; font-size: 18px; }
+        .card p { font-size: 13px; color: #7f8c8d; line-height: 1.4; }
+
+        .btn-logout {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-header">
+    <div class="user-info">
+        <h3 id="welcomeName">Halo, Alumni!</h3>
+        <p>Selamat datang di SiLaNi terStudy Poltekkes Kaltim</p>
+    </div>
+    <button class="btn-logout" onclick="logout()">Keluar</button>
+</div>
+
+<div class="grid-container">
+    <a href="https://sites.google.com/view/alumni-poltekkes-kaltim/tracer-study" target="_top" class="card">
+        <span class="icon">📊</span>
+        <h4>Isi Tracer Study</h4>
+        <p>Lengkapi data kuesioner pelacakan alumni tahun ini.</p>
+    </a>
+
+    <a href="#" class="card">
+        <span class="icon">👤</span>
+        <h4>Update Profil</h4>
+        <p>Perbarui kontak, alamat, dan tempat kerja terbaru.</p>
+    </a>
+
+    <a href="#" class="card">
+        <span class="icon">📜</span>
+        <h4>E-Legalisir</h4>
+        <p>Layanan permintaan legalisir ijazah secara online.</p>
+    </a>
+
+    <a href="#" class="card">
+        <span class="icon">💼</span>
+        <h4>Info Karir</h4>
+        <p>Temukan info lowongan kerja khusus alumni Poltekkes.</p>
+    </a>
+</div>
+
+<script>
+    // Mengambil nama dari localStorage (yang kita set saat login)
+    const userName = localStorage.getItem('alumniNama') || 'Alumni';
+    document.getElementById('welcomeName').innerText = "Halo, " + userName + "!";
+
+    function logout() {
+        localStorage.clear();
+        window.top.location.href = "index.html"; // Kembali ke halaman login
+    }
+</script>
+
+</body>
+</html>
