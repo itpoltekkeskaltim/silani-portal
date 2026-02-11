@@ -110,7 +110,7 @@
         if (!userData) {
             // Jika tidak ada sesi, tendang ke login
             alert("Sesi habis atau Anda belum login.");
-            window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
+            window.top.location.href = "index.html";
         } else {
             // Jika ada, tampilkan data user
             const user = JSON.parse(userData);
@@ -126,7 +126,7 @@
     function logout() {
         if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
             localStorage.removeItem('userSiLaNi');
-            window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
+            window.top.location.href = "index.html";
         }
     }
 </script>
