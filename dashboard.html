@@ -1,59 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <style>
-        /* Loading overlay agar konten tidak 'flash' sebelum redirect */
-        #protection-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: sans-serif;
-        }
-    </style>
-</head>
-<body>
-
-<div id="protection-layer">
-    <p>Memverifikasi Sesi...</p>
-</div>
-
-<script>
-    (function() {
-        // 1. Cek apakah ada data user di storage browser
-        const userData = localStorage.getItem('userSiLaNi');
-        
-        // 2. GANTI URL INI dengan link halaman Login SiLaNi Anda
-        const loginPageUrl = "https://sites.google.com/view/silani-terstudy/login";
-
-        if (!userData) {
-            // Jika tidak ada data login, tampilkan pesan dan tendang ke login
-            alert("Akses Ditolak! Anda harus login terlebih dahulu.");
-            window.top.location.href = loginPageUrl;
-        } else {
-            // Jika ada, hapus layer pelindung dan izinkan melihat konten
-            document.getElementById('protection-layer').style.display = 'none';
-            
-            // Opsional: Tampilkan nama user di konsol untuk debugging
-            const user = JSON.parse(userData);
-            console.log("Login sebagai: " + user.nama);
-        }
-    })();
-
-    // Fungsi tambahan untuk Logout (Bisa dipasang di tombol Logout)
-    function logoutSiLaNi() {
-        localStorage.removeItem('userSiLaNi');
-        window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
-    }
-</script>
-
-</body>
-</html>
-
-<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -62,112 +7,127 @@
         :root {
             --primary: #2c3e50;
             --secondary: #27ae60;
-            --accent: #3498db;
-            --bg: #f8f9fa;
+            --danger: #e74c3c;
+            --bg: #f4f7f6;
         }
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             background-color: var(--bg);
-            color: var(--primary);
+            color: #333;
         }
+        /* Header Dashboard */
         .dashboard-header {
             background: white;
-            padding: 20px;
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .user-info h3 { margin: 0; color: var(--secondary); }
-        .user-info p { margin: 0; font-size: 14px; color: #666; }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 25px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid #eee;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-color: var(--secondary);
-        }
-        .card .icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-            display: block;
-        }
-        .card h4 { margin: 10px 0; font-size: 18px; }
-        .card p { font-size: 13px; color: #7f8c8d; line-height: 1.4; }
+        .user-info h3 { margin: 0; color: var(--primary); font-size: 18px; }
+        .user-info p { margin: 0; font-size: 13px; color: #666; }
 
         .btn-logout {
-            padding: 8px 15px;
-            background: #e74c3c;
+            background-color: var(--danger);
             color: white;
             border: none;
+            padding: 8px 16px;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-logout:hover { background-color: #c0392b; }
+
+        /* Container Monitoring */
+        .monitor-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .card h2 { margin-top: 0; font-size: 20px; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+
+        /* Responsive Iframe */
+        .iframe-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 56.25%; /* Aspect Ratio 16:9 */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            width: 100%; height: 100%;
+        }
+
+        /* Protection Overlay */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 9999; display: flex; 
+            align-items: center; justify-content: center;
         }
     </style>
 </head>
 <body>
 
+<div id="lock-screen">
+    <p>Memuat Data Sesi...</p>
+</div>
+
 <div class="dashboard-header">
     <div class="user-info">
-        <h3 id="welcomeName">Halo, Alumni!</h3>
-        <p>Selamat datang di SiLaNi terStudy Poltekkes Kaltim</p>
+        <h3 id="display-nama">Memuat Nama...</h3>
+        <p id="display-nim">NIM: -</p>
     </div>
     <button class="btn-logout" onclick="logout()">Keluar</button>
 </div>
 
-<div class="grid-container">
-    <a href="https://sites.google.com/view/alumni-poltekkes-kaltim/tracer-study" target="_top" class="card">
-        <span class="icon">📊</span>
-        <h4>Isi Tracer Study</h4>
-        <p>Lengkapi data kuesioner pelacakan alumni tahun ini.</p>
-    </a>
-
-    <a href="#" class="card">
-        <span class="icon">👤</span>
-        <h4>Update Profil</h4>
-        <p>Perbarui kontak, alamat, dan tempat kerja terbaru.</p>
-    </a>
-
-    <a href="#" class="card">
-        <span class="icon">📜</span>
-        <h4>E-Legalisir</h4>
-        <p>Layanan permintaan legalisir ijazah secara online.</p>
-    </a>
-
-    <a href="#" class="card">
-        <span class="icon">💼</span>
-        <h4>Info Karir</h4>
-        <p>Temukan info lowongan kerja khusus alumni Poltekkes.</p>
-    </a>
+<div class="monitor-container">
+    <div class="card">
+        <h2>Monitoring Progres Layanan Alumni</h2>
+        <p style="font-size: 14px; color: #666;">Berikut adalah status terbaru permintaan layanan Anda di SiLaNi terStudy.</p>
+        
+        <div class="iframe-wrapper">
+            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQY2UahVLDaSQRar4PpzqqHBvWGHwoMlbe6Z_Ob90bhpqk21arKtnYx8mZld170jZnHTrykF-_f55S3/pubhtml?gid=1225688108&single=true"></iframe>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Mengambil nama dari localStorage (yang kita set saat login)
-    const userName = localStorage.getItem('alumniNama') || 'Alumni';
-    document.getElementById('welcomeName').innerText = "Halo, " + userName + "!";
+    // 1. SESSION CHECKER
+    window.onload = function() {
+        const userData = localStorage.getItem('userSiLaNi');
+        
+        if (!userData) {
+            // Jika tidak ada sesi, tendang ke login
+            alert("Sesi habis atau Anda belum login.");
+            window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
+        } else {
+            // Jika ada, tampilkan data user
+            const user = JSON.parse(userData);
+            document.getElementById('display-nama').innerText = user.nama;
+            document.getElementById('display-nim').innerText = "Prodi: " + user.prodi;
+            
+            // Hilangkan lock screen
+            document.getElementById('lock-screen').style.display = 'none';
+        }
+    };
 
+    // 2. FUNGSI LOGOUT
     function logout() {
-        localStorage.clear();
-        window.top.location.href = "index.html"; // Kembali ke halaman login
+        if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+            localStorage.removeItem('userSiLaNi');
+            window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
+        }
     }
 </script>
 
