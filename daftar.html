@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi SiLaNi terStudy</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -16,6 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
         .register-container {
@@ -58,9 +61,10 @@
             transition: 0.3s;
         }
         .btn-submit:hover { background-color: #219150; }
+        .btn-submit:disabled { background-color: #95a5a6; cursor: not-allowed; }
         
         .footer-link { text-align: center; margin-top: 15px; font-size: 13px; }
-        .footer-link a { color: var(--secondary-color); text-decoration: none; }
+        .footer-link a { color: var(--secondary-color); text-decoration: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -91,14 +95,13 @@
                 <option value="D3 Kebidanan">D3 Kebidanan</option>
                 <option value="D3 PJJ Kebidanan">D3 PJJ Kebidanan</option>
                 <option value="D3 Kebidanan (Kampus Balikpapan)">D3 Kebidanan (Kampus Balikpapan)</option>
-                <option value="D3 Teknologi Laboratorium Medis / Analis Kesehatan">D3 Teknologi Laboratorium Medis / Analis Kesehatan</option>
+                <option value="D3 Teknologi Laboratorium Medis">D3 Teknologi Laboratorium Medis</option>
                 <option value="STr Keperawatan">STr Keperawatan</option>
                 <option value="STr Kebidanan">STr Kebidanan</option>
                 <option value="STr Gizi">STr Gizi</option>
                 <option value="STr Promosi Kesehatan">STr Promosi Kesehatan</option>
                 <option value="Pendidikan Profesi Ners">Pendidikan Profesi Ners</option>
-                <option value="Pendidikan Profesi Ners">Pendidikan Profesi Ners</option>
-                </select>
+            </select>
         </div>
 
         <div class="form-group">
@@ -113,46 +116,22 @@
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" placeholder="Minimal 8 Karakter" required>
-        </div>
-
-        <button type="submit" class="btn-submit">Buat Akun</button>
-    </form>
-
-    <div class="footer-link">
-        Sudah punya akun? <a href="index.html">Login di sini</a>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<div class="register-container">
-    <div class="header">
-        <h2>Buat Akun SiLaNi terStudy</h2>
-        <p>Sistem Layanan Alumni Terintegrasi Tracer Study</p>
-    </div>
-
-    <form id="registrationForm">
-        <div class="form-group">
-            <label>NIM (Nomor Induk Mahasiswa)</label>
-            <input type="text" name="nim" placeholder="Contoh: P0722..." required>
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Minimal 8 Karakter" required>
+            <input type="password" name="password" placeholder="Minimal 8 Karakter" minlength="8" required>
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">Buat Akun</button>
     </form>
 
     <div class="footer-link">
-        Sudah punya akun? <a href="javascript:void(0);" onclick="redirectToLogin()">Login di sini</a>
+        Sudah punya akun? <a onclick="redirectToLogin()">Login di sini</a>
     </div>
 </div>
 
 <script>
+    // URL Web App dari Apps Script Anda
     const webAppUrl = "https://script.google.com/macros/s/AKfycbxJGAMLgAOEvonsTz4AGnc7GTSnbFUF_Ag-sDdWJ_PjigtlsTM7qc1mDOOHz0w_NqIY/exec";
-    const loginPageUrl = "index.html"; // Pastikan URL Login benar
+    // URL Halaman Login Google Sites Anda
+    const loginPageUrl = "https://sites.google.com/view/silani-terstudy/login"; 
 
     function redirectToLogin() {
         window.top.location.href = loginPageUrl;
@@ -165,6 +144,7 @@
         submitBtn.innerText = "Mengirim Data...";
         submitBtn.disabled = true;
 
+        // Mengambil data dari form
         const formData = {
             nama: e.target.nama.value,
             nim: e.target.nim.value,
@@ -176,13 +156,13 @@
 
         fetch(webAppUrl, {
             method: 'POST',
-            mode: 'no-cors', 
+            mode: 'no-cors', // Penting untuk Apps Script doPost
             cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
         .then(() => {
-            // Notifikasi Sukses menggunakan SweetAlert
+            // Notifikasi Sukses
             Swal.fire({
                 title: 'Registrasi Berhasil!',
                 text: 'Akun Anda telah terdaftar. Silakan login untuk masuk ke sistem.',
@@ -190,10 +170,8 @@
                 confirmButtonColor: '#27ae60',
                 confirmButtonText: 'Ke Halaman Login'
             }).then((result) => {
-                // Redirect ke halaman login setelah user klik OK
                 redirectToLogin();
             });
-            
             e.target.reset();
         })
         .catch(error => {
