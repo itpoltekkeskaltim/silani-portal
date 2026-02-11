@@ -1,4 +1,59 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Loading overlay agar konten tidak 'flash' sebelum redirect */
+        #protection-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div id="protection-layer">
+    <p>Memverifikasi Sesi...</p>
+</div>
+
+<script>
+    (function() {
+        // 1. Cek apakah ada data user di storage browser
+        const userData = localStorage.getItem('userSiLaNi');
+        
+        // 2. GANTI URL INI dengan link halaman Login SiLaNi Anda
+        const loginPageUrl = "https://sites.google.com/view/silani-terstudy/login";
+
+        if (!userData) {
+            // Jika tidak ada data login, tampilkan pesan dan tendang ke login
+            alert("Akses Ditolak! Anda harus login terlebih dahulu.");
+            window.top.location.href = loginPageUrl;
+        } else {
+            // Jika ada, hapus layer pelindung dan izinkan melihat konten
+            document.getElementById('protection-layer').style.display = 'none';
+            
+            // Opsional: Tampilkan nama user di konsol untuk debugging
+            const user = JSON.parse(userData);
+            console.log("Login sebagai: " + user.nama);
+        }
+    })();
+
+    // Fungsi tambahan untuk Logout (Bisa dipasang di tombol Logout)
+    function logoutSiLaNi() {
+        localStorage.removeItem('userSiLaNi');
+        window.top.location.href = "https://sites.google.com/view/silani-terstudy/login";
+    }
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
