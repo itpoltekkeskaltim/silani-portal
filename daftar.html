@@ -124,12 +124,45 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="register-container">
+    <div class="header">
+        <h2>Buat Akun SiLaNi terStudy</h2>
+        <p>Sistem Layanan Alumni Terintegrasi Tracer Study</p>
+    </div>
+
+    <form id="registrationForm">
+        <div class="form-group">
+            <label>NIM (Nomor Induk Mahasiswa)</label>
+            <input type="text" name="nim" placeholder="Contoh: P0722..." required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Minimal 8 Karakter" required>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Buat Akun</button>
+    </form>
+
+    <div class="footer-link">
+        Sudah punya akun? <a href="javascript:void(0);" onclick="redirectToLogin()">Login di sini</a>
+    </div>
+</div>
+
 <script>
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxJGAMLgAOEvonsTz4AGnc7GTSnbFUF_Ag-sDdWJ_PjigtlsTM7qc1mDOOHz0w_NqIY/exec";
+    const loginPageUrl = "index.html"; // Pastikan URL Login benar
+
+    function redirectToLogin() {
+        window.top.location.href = loginPageUrl;
+    }
+
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const submitBtn = e.target.querySelector('.btn-submit');
-        submitBtn.innerText = "Memproses...";
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerText = "Mengirim Data...";
         submitBtn.disabled = true;
 
         const formData = {
@@ -141,25 +174,37 @@
             password: e.target.password.value
         };
 
-        // GANTI URL DI BAWAH DENGAN URL WEB APP ANDA
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbxJGAMLgAOEvonsTz4AGnc7GTSnbFUF_Ag-sDdWJ_PjigtlsTM7qc1mDOOHz0w_NqIY/exec";
-
         fetch(webAppUrl, {
             method: 'POST',
-            mode: 'no-cors', // Penting untuk menghindari masalah CORS di Google Apps Script
+            mode: 'no-cors', 
             cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
         .then(() => {
-            alert('Pendaftaran Berhasil! Silakan tunggu konfirmasi admin atau coba login.');
+            // Notifikasi Sukses menggunakan SweetAlert
+            Swal.fire({
+                title: 'Registrasi Berhasil!',
+                text: 'Akun Anda telah terdaftar. Silakan login untuk masuk ke sistem.',
+                icon: 'success',
+                confirmButtonColor: '#27ae60',
+                confirmButtonText: 'Ke Halaman Login'
+            }).then((result) => {
+                // Redirect ke halaman login setelah user klik OK
+                redirectToLogin();
+            });
+            
             e.target.reset();
         })
         .catch(error => {
-            alert('Terjadi kesalahan: ' + error);
+            Swal.fire({
+                title: 'Terjadi Kesalahan',
+                text: 'Gagal menghubungi server: ' + error,
+                icon: 'error'
+            });
         })
         .finally(() => {
-            submitBtn.innerText = "Daftar Sekarang";
+            submitBtn.innerText = "Buat Akun";
             submitBtn.disabled = false;
         });
     });
