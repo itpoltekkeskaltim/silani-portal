@@ -108,7 +108,7 @@
     <div id="message"></div>
 
     <div style="text-align: center; margin-top: 25px; font-size: 14px; color: #666;">
-        Alumni baru? <a href="https://sites.google.com/view/silani-terstudy/buat-akun" style="color: var(--secondary-color); text-decoration: none; font-weight: bold;">Buat Akun</a>
+        Alumni baru? <a href="daftar.html" style="color: var(--secondary-color); text-decoration: none; font-weight: bold;">Buat Akun</a>
     </div>
 </div>
 
@@ -150,6 +150,17 @@ setTimeout(() => {
     const dashboardUrl = "https://sites.google.com/view/silani-terstudy?usp=sharing";
     
     try {
+        if(data.result === "success") {
+    msg.style.color = "green";
+    msg.innerHTML = `<b>Login Berhasil!</b><br>Halo, ${data.user.nama}.<br><a href="https://sites.google.com/view/silani-terstudy/halaman-muka_1" target="_top" style="color:blue; font-weight:bold;">Klik di sini jika tidak otomatis pindah</a>`;
+    
+    localStorage.setItem('userSiLaNi', JSON.stringify(data.user));
+
+    // Eksekusi redirect otomatis
+    setTimeout(() => {
+        window.top.location.href = "https://sites.google.com/view/silani-terstudy/halaman-muka_1";
+    }, 1500);
+}
         // Upaya 1: Mengubah URL jendela utama
         if (window.top) {
             window.top.location.href = dashboardUrl;
