@@ -145,9 +145,23 @@
                 localStorage.setItem('userSiLaNi', JSON.stringify(data.user));
                 
                 // Redirect ke Dashboard
-                setTimeout(() => {
-                    window.top.location.href = "https://sites.google.com/view/silani-terstudy/halaman-muka_1"; 
-                }, 1500);
+               // Redirect ke Dashboard
+setTimeout(() => {
+    const dashboardUrl = "https://sites.google.com/view/silani-terstudy/halaman-muka_1";
+    
+    try {
+        // Upaya 1: Mengubah URL jendela utama
+        if (window.top) {
+            window.top.location.href = dashboardUrl;
+        } else {
+            window.location.href = dashboardUrl;
+        }
+    } catch (e) {
+        // Upaya 2: Jika diblokir oleh Sandbox, buka di tab baru atau paksa ganti
+        console.error("Redirect diblokir browser, mencoba metode alternatif...");
+        window.open(dashboardUrl, "_top");
+    }
+}, 1500);
             } else {
                 msg.style.color = "#e74c3c";
                 msg.innerText = data.message; // Menampilkan "NIM atau Password salah!"
