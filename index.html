@@ -140,7 +140,7 @@
         </div>
 
         <div class="forgot-pass">
-            <a href="lupapassword.html">Lupa Password?</a>
+            <a href="#">Lupa Password?</a>
         </div>
 
         <button type="submit" class="btn-login" id="loginBtn">
@@ -149,31 +149,49 @@
         </button>
     </form>
 
-   <div class="register-prompt">
-    Alumni baru? <a href="daftar.html" id="linkDaftar">Buat Akun Sekarang</a>
+    <div class="register-prompt">
+        Alumni baru? <a href="#">Buat Akun Sekarang</a>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const supabase = supabase.createClient('https://biduabmeloughbnqlwcq.supabase.co', 'sb_publishable_rNKePi7N3qW5GThgZAPmCw_PtjSH5kb');
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxJGAMLgAOEvonsTz4AGnc7GTSnbFUF_Ag-sDdWJ_PjigtlsTM7qc1mDOOHz0w_NqIY/exec"; // Tempel URL Deployment Anda
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = document.getElementById('username').value; // Mengasumsikan login pakai email
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('message');
+        const nim = document.getElementById('nim').value;
         const pass = document.getElementById('password').value;
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: pass,
-        });
+        btn.innerText = "Mengecek...";
+        btn.disabled = true;
 
-        if (error) {
-            alert("Login Gagal: " + error.message);
-        } else {
-            // Simpan data user ke localStorage untuk Dashboard
-            localStorage.setItem('alumniNama', data.user.user_metadata.nama);
-            window.location.href = "dashboard.html";
-        }
+        fetch(`${webAppUrl}?nim=${nim}&password=${pass}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.result === "success") {
+                msg.style.color = "green";
+                msg.innerHTML = `Selamat Datang, ${data.user.nama}!<br>Mengalihkan ke Dashboard...`;
+                // Simpan session sederhana di browser jika perlu
+                localStorage.setItem('userSiLaNi', JSON.stringify(data.user));
+                
+                // Arahkan ke halaman Dashboard Tracer Study Anda
+                setTimeout(() => {
+                    window.top.location.href = "https://sites.google.com/view/silani-terstudy/dashboard"; 
+                }, 2000);
+            } else {
+                msg.style.color = "red";
+                msg.innerText = data.message;
+                btn.disabled = false;
+                btn.innerText = "Masuk";
+            }
+        })
+        .catch(err => {
+            msg.innerText = "Terjadi kesalahan koneksi.";
+            btn.disabled = false;
+            btn.innerText = "Masuk";
+        });
     });
 </script>
 
